@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Bus Tracking System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fc;
+    color: #26334a;
+}
+
+header {
+    background: linear-gradient(120deg, #123b75, #3478d4);
+    color: white;
+    padding: 25px 7%;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #dceaff;
+}
+
+nav {
+    background: white;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+nav a {
+    color: #24528d;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.container {
+    width: 92%;
+    max-width: 1150px;
+    margin: 28px auto;
+}
+
+.hero {
+    background: linear-gradient(120deg, #dceaff, #e9e5ff);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.hero h2 {
+    color: #174b91;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    margin-bottom: 18px;
+    color: #4c5c74;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    text-align: center;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #e1e6f0;
+}
+
+.stat h2 {
+    color: #2465b5;
+    font-size: 30px;
+    margin-bottom: 7px;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 13px;
+    box-shadow: 0 3px 12px #e1e6f0;
+    margin-bottom: 25px;
+}
+
+.panel h2 {
+    color: #174b91;
+    margin-bottom: 18px;
+}
+
+select, input {
+    padding: 12px;
+    border: 1px solid #ccd5e3;
+    border-radius: 7px;
+    font-size: 15px;
+    background: white;
+}
+
+select {
+    width: 100%;
+    margin: 10px 0;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 7px;
+    background: #2465b5;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+.secondary {
+    background: #e6efff;
+    color: #24528d;
+}
+
+.green {
+    background: #15966b;
+}
+
+.bus-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-box {
+    background: #f2f6ff;
+    padding: 17px;
+    border-radius: 9px;
+}
+
+.info-box span {
+    color: #687991;
+    font-size: 13px;
+}
+
+.info-box h3 {
+    margin-top: 8px;
+    color: #24528d;
+}
+
+/* Route display */
+.route {
+    margin-top: 20px;
+    padding: 15px 5px;
+}
+
+.stop {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 62px;
+}
+
+.circle {
+    width: 17px;
+    height: 17px;
+    border: 4px solid #2465b5;
+    border-radius: 50%;
+    background: white;
+    flex-shrink: 0;
+}
+
+.stop.done .circle {
+    background: #15966b;
+    border-color: #15966b;
+}
+
+.stop.current .circle {
+    background: #ffb52e;
+    border-color: #ffb52e;
+    box-shadow: 0 0 0 5px #fff0cf;
+}
+
+.stop-name {
+    font-weight: bold;
+}
+
+.stop small {
+    display: block;
+    color: #78869a;
+    margin-top: 4px;
+}
+
+.line {
+    width: 3px;
+    height: 22px;
+    background: #c8d7eb;
+    margin-left: 7px;
+}
+
+.stop.done + .line {
+    background: #15966b;
+}
+
+/* Bus cards */
+.bus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.bus-card {
+    background: #f5f8ff;
+    padding: 20px;
+    border: 1px solid #e1e8f3;
+    border-radius: 11px;
+}
+
+.bus-card h3 {
+    color: #24528d;
+    margin: 10px 0;
+}
+
+.bus-card p {
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #d7f7e8;
+    color: #08784d;
+    font-weight: bold;
+}
+
+footer {
+    background: #123b75;
+    color: white;
+    text-align: center;
+    padding: 24px;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 6px;
+}
+
+@media(max-width: 700px) {
+    .stats, .bus-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bus-info {
+        grid-template-columns: 1fr;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 7px;
+    }
+
+    .hero {
+        padding: 25px 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚌 College Bus Tracking System</h1>
+    <p>Track Your Bus • Check Routes • Save Time</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#tracking">Track Bus</a>
+    <a href="#routes">Bus Routes</a>
+    <a href="#about">About</a>
+</nav>
+
+<main class="container">
+
+    <section class="hero" id="home">
+        <h2>Welcome to Smart Bus Tracking</h2>
+        <p>Know where your college bus is and when it will arrive.</p>
+        <button onclick="goToTracking()">Track Your Bus</button>
+    </section>
+
+    <!-- Dashboard -->
+
+    <section class="stats">
+        <div class="stat">
+            <h2 id="totalBuses">3</h2>
+            <p>Total College Buses</p>
+        </div>
+
+        <div class="stat">
+            <h2 id="activeBuses">3</h2>
+            <p>Active Buses</p>
+        </div>
+
+        <div class="stat">
+            <h2>3</h2>
+            <p>Available Routes</p>
+        </div>
+    </section>
+
+    <!-- Tracking section -->
+
+    <section class="panel" id="tracking">
+        <h2>📍 Track Your Bus</h2>
+
+        <label for="busSelect"><b>Select Bus Number</b></label>
+        <select id="busSelect">
+            <option value="BUS 101">BUS 101 - City Route</option>
+            <option value="BUS 102">BUS 102 - Railway Route</option>
+            <option value="BUS 103">BUS 103 - Village Route</option>
+        </select>
+
+        <div class="bus-info">
+            <div class="info-box">
+                <span>Bus Number</span>
+                <h3 id="busNumber">BUS 101</h3>
+            </div>
+
+            <div class="info-box">
+                <span>Current Location</span>
+                <h3 id="currentLocation">City Center</h3>
+            </div>
+
+            <div class="info-box">
+                <span>Next Stop</span>
+                <h3 id="nextStop">Main Market</h3>
+            </div>
+
+            <div class="info-box">
+                <span>Estimated Arrival</span>
+                <h3 id="arrival">10 minutes</h3>
+            </div>
+        </div>
+
+        <br>
+        <p><b>Bus Movement Simulation</b></p>
+        <p id="liveStatus" style="color:#15966b; margin:10px 0;">
+            ● Simulation running
+        </p>
+
+        <button onclick="nextStop()" class="green">
+            Move to Next Stop →
+        </button>
+
+        <button onclick="resetBus()" class="secondary">
+            Reset Route
+        </button>
+
+        <div class="route" id="routeDisplay"></div>
+    </section>
+
+    <!-- Routes -->
+
+    <section class="panel" id="routes">
+        <h2>🚌 Available Bus Routes</h2>
+
+        <input type="search" id="routeSearch"
+        placeholder="Search bus number or route..."
+        style="width:100%; margin-bottom:20px;">
+
+        <div class="bus-grid" id="busCards">
+
+            <div class="bus-card">
+                <span class="status">Active</span>
+                <h3>🚌 BUS 101</h3>
+                <p>Route: City Center to College</p>
+                <p>Stops: 4</p>
+                <button onclick="selectBus('BUS 101')">
+                    Track This Bus
+                </button>
+            </div>
+
+            <div class="bus-card">
+                <span class="status">Active</span>
+                <h3>🚌 BUS 102</h3>
+                <p>Route: Railway Station to College</p>
+                <p>Stops: 4</p>
+                <button onclick="selectBus('BUS 102')">
+                    Track This Bus
+                </button>
+            </div>
+
+            <div class="bus-card">
+                <span class="status">Active</span>
+                <h3>🚌 BUS 103</h3>
+                <p>Route: Village Road to College</p>
+                <p>Stops: 4</p>
+                <button onclick="selectBus('BUS 103')">
+                    Track This Bus
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- About -->
+
+    <section class="panel" id="about">
+        <h2>About This Project</h2>
+        <p>
+            The College Bus Tracking System is designed to help
+            students know their college bus routes and estimated
+            arrival times. It reduces unnecessary waiting and
+            improves transportation convenience.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <h3>🚌 College Bus Tracking System</h3>
+    <p>Safe Journey, Happy Students!</p>
+    <p>© 2026 College Web Technology Project</p>
+</footer>
+
+<script>
+
+// Bus route information
+
+const buses = {
+    "BUS 101": {
+        stops: ["City Center", "Main Market",
+                "Central Park", "College"],
+        arrival: 10
+    },
+
+    "BUS 102": {
+        stops: ["Railway Station", "Bus Stand",
+                "City Hospital", "College"],
+        arrival: 15
+    },
+
+    "BUS 103": {
+        stops: ["Village Road", "Post Office",
+                "Temple Junction", "College"],
+        arrival: 20
+    }
+};
+
+let selectedBus = "BUS 101";
+let currentIndex = 0;
+
+// Update bus tracking display
+
+function updateTracking() {
+
+    const bus = buses[selectedBus];
+
+    document.getElementById("busNumber").textContent =
+        selectedBus;
+
+    document.getElementById("currentLocation").textContent =
+        bus.stops[currentIndex];
+
+    document.getElementById("nextStop").textContent =
+        bus.stops[currentIndex + 1] || "Destination Reached";
+
+    document.getElementById("arrival").textContent =
+        currentIndex === bus.stops.length - 1
+        ? "Arrived"
+        : ((bus.stops.length - 1 - currentIndex) * 5) + " minutes";
+
+    renderRoute();
+}
+
+// Display route stops
+
+function renderRoute() {
+
+    const bus = buses[selectedBus];
+    const route = document.getElementById("routeDisplay");
+
+    route.replaceChildren();
+
+    bus.stops.forEach((stop, index) => {
+
+        const stopDiv = document.createElement("div");
+
+        stopDiv.className = "stop";
+
+        if (index < currentIndex) {
+            stopDiv.classList.add("done");
+        }
+
+        if (index === currentIndex) {
+            stopDiv.classList.add("current");
+        }
+
+        const circle = document.createElement("div");
+        circle.className = "circle";
+
+        const details = document.createElement("div");
+
+        const name = document.createElement("div");
+        name.className = "stop-name";
+        name.textContent =
+            (index === currentIndex ? "🚌 " : "") + stop;
+
+        const time = document.createElement("small");
+
+        if (index < currentIndex) {
+            time.textContent = "Passed";
+        } else if (index === currentIndex) {
+            time.textContent = "Current location";
+        } else {
+            time.textContent = "Upcoming stop";
+        }
+
+        details.appendChild(name);
+        details.appendChild(time);
+
+        stopDiv.appendChild(circle);
+        stopDiv.appendChild(details);
+
+        route.appendChild(stopDiv);
+
+        if (index !== bus.stops.length - 1) {
+            const line = document.createElement("div");
+            line.className = "line";
+            route.appendChild(line);
+        }
+
+    });
+}
+
+// Move bus to next stop
+
+function nextStop() {
+
+    const bus = buses[selectedBus];
+
+    if (currentIndex < bus.stops.length - 1) {
+
+        currentIndex++;
+        updateTracking();
+
+    } else {
+
+        document.getElementById("liveStatus").textContent =
+            "✓ Bus has reached its destination!";
+
+        alert("The bus has reached the college!");
+
+    }
+}
+
+// Reset bus position
+
+function resetBus() {
+
+    currentIndex = 0;
+
+    document.getElementById("liveStatus").textContent =
+        "● Simulation running";
+
+    updateTracking();
+}
+
+// Select another bus
+
+function selectBus(busNumber) {
+
+    selectedBus = busNumber;
+    currentIndex = 0;
+
+    document.getElementById("busSelect").value = busNumber;
+
+    document.getElementById("liveStatus").textContent =
+        "● Simulation running";
+
+    updateTracking();
+
+    goToTracking();
+}
+
+// Dropdown event
+
+document.getElementById("busSelect")
+.addEventListener("change", function() {
+
+    selectBus(this.value);
+
+});
+
+// Search bus routes
+
+document.getElementById("routeSearch")
+.addEventListener("input", function() {
+
+    const value = this.value.toLowerCase();
+
+    document.querySelectorAll(".bus-card").forEach(card => {
+
+        card.style.display =
+            card.textContent.toLowerCase().includes(value)
+            ? "block" : "none";
+
+    });
+
+});
+
+// Navigate to tracking
+
+function goToTracking() {
+
+    document.getElementById("tracking")
+    .scrollIntoView({ behavior: "smooth" });
+
+}
+
+// Start website
+
+updateTracking();
+
+</script>
+
+</body>
+</html>
